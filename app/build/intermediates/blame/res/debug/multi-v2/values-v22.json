@@ -4,22 +4,14 @@
             "outputFile": "C:\\Users\\DElll\\Downloads\\Compressed\\AndroidLoginAndRegistration v2\\AndroidLoginAndRegistration\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-v22\\values-v22.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\DElll\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-23.1.1.aar\\942d4972ad405fe0eff982c9e742525f\\res\\values-v22\\values-v22.xml",
+                    "source": "C:\\Users\\DElll\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-28.0.0.aar\\838d3a7d27eeb8a38084056fefdb0ffe\\res\\values-v22\\values-v22.xml",
                     "from": {
-                        "startLines": "4,5,6,9",
+                        "startLines": "2,3,4,9",
                         "startColumns": "4,4,4,4",
-                        "startOffsets": "234,309,396,577",
-                        "endLines": "4,5,8,11",
+                        "startOffsets": "55,130,217,553",
+                        "endLines": "2,3,8,13",
                         "endColumns": "74,86,12,12",
-                        "endOffsets": "304,391,572,765"
-                    },
-                    "to": {
-                        "startLines": "2,3,4,7",
-                        "startColumns": "4,4,4,4",
-                        "startOffsets": "55,130,217,398",
-                        "endLines": "2,3,6,9",
-                        "endColumns": "74,86,12,12",
-                        "endOffsets": "125,212,393,586"
+                        "endOffsets": "125,212,548,896"
                     }
                 }
             ]

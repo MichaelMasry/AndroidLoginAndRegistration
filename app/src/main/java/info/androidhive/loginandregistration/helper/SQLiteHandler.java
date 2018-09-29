@@ -1,8 +1,3 @@
-/**
- * Author: Ravi Tamada
- * URL: www.androidhive.info
- * twitter: http://twitter.com/ravitamada
- * */
 package info.androidhive.loginandregistration.helper;
 
 import android.content.ContentValues;
@@ -33,6 +28,9 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 	private static final String KEY_NAME = "name";
 	private static final String KEY_EMAIL = "email";
 	private static final String KEY_UID = "uid";
+    private static final String KEY_AGE = "age";
+	private static final String KEY_COUNTRY = "country";
+	private static final String KEY_NUMBER = "number";
 	private static final String KEY_CREATED_AT = "created_at";
 
 	public SQLiteHandler(Context context) {
@@ -64,7 +62,8 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 	/**
 	 * Storing user details in database
 	 * */
-	public void addUser(String name, String email, String uid, String created_at) {
+	public void addUser(String name, String email, String uid, String created_at,String age,
+						String number , String country) {
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
@@ -72,7 +71,44 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 		values.put(KEY_EMAIL, email); // Email
 		values.put(KEY_UID, uid); // Email
 		values.put(KEY_CREATED_AT, created_at); // Created At
+        values.put(KEY_AGE,age);
+		values.put(KEY_COUNTRY,country);
+        values.put(KEY_NUMBER,number);
 
+
+		// Inserting Row
+		long id = db.insert(TABLE_USER, null, values);
+		db.close(); // Closing database connection
+
+		Log.d(TAG, "New user inserted into sqlite: " + id);
+	}
+	public void addUser(String name, String email, String uid, String created_at/*,String age,
+						String number , String country*/) {
+		SQLiteDatabase db = this.getWritableDatabase();
+
+		ContentValues values = new ContentValues();
+		values.put(KEY_NAME, name); // Name
+		values.put(KEY_EMAIL, email); // Email
+		values.put(KEY_UID, uid); // Email
+		values.put(KEY_CREATED_AT, created_at); // Created At
+		//values.put(KEY_NUMBER,number);
+		//values.put(KEY_COUNTRY,country);
+		//values.put(KEY_AGE,age);
+
+
+		// Inserting Row
+		long id = db.insert(TABLE_USER, null, values);
+		db.close(); // Closing database connection
+
+		Log.d(TAG, "New user inserted into sqlite: " + id);
+	}
+
+	public void addUser(String name, String email) {
+		SQLiteDatabase db = this.getWritableDatabase();
+
+		ContentValues values = new ContentValues();
+		values.put(KEY_NAME, name); // Name
+		values.put(KEY_EMAIL, email); // Email
 		// Inserting Row
 		long id = db.insert(TABLE_USER, null, values);
 		db.close(); // Closing database connection
@@ -84,7 +120,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 	 * Getting user data from database
 	 * */
 	public HashMap<String, String> getUserDetails() {
-		HashMap<String, String> user = new HashMap<String, String>();
+		HashMap<String, String> user = new HashMap<>();
 		String selectQuery = "SELECT  * FROM " + TABLE_USER;
 
 		SQLiteDatabase db = this.getReadableDatabase();
