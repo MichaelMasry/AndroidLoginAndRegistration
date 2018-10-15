@@ -32,7 +32,7 @@ public class LoginActivity extends Activity {
     private ProgressDialog pDialog;
     private SessionManager session;
     private SQLiteHandler db;
-    private final String url = "http://192.168.1.2/userDB/login.php";
+    private final String url = "http://192.168.1.4/userDB/login.php";
     public static final String Key_Email = "email";
     public static final String Key_Password = "password";
 
@@ -122,7 +122,7 @@ public class LoginActivity extends Activity {
                         String email = jObj.getString("email");
                         db.addUser(name, email);
                         session.setLogin(true);
-                        Intent iii = new Intent(getApplicationContext(),MainActivity.class);
+                        Intent iii = new Intent(getApplicationContext(),Main3Activity.class);
                         iii.putExtra("name",name);
                         iii.putExtra("email",email);
                         startActivity(iii);
@@ -190,17 +190,14 @@ public class LoginActivity extends Activity {
             }
 
         };
-
         // Adding request to request queue
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(strReq);
     }
-
     private void showDialog() {
         if (!pDialog.isShowing())
             pDialog.show();
     }
-
     private void hideDialog() {
         if (pDialog.isShowing())
             pDialog.dismiss();

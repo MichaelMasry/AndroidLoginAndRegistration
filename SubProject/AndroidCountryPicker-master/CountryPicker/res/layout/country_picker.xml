@@ -12,7 +12,7 @@
         android:hint="@string/search"
         android:drawableLeft="@drawable/search_icon" />
 
-    <ListView
+   <!-- <ListView
         android:id="@+id/country_picker_listview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -21,5 +21,5 @@
         android:layout_marginRight="10dp"
         android:layout_marginBottom="10dp" >
     </ListView>
-
+-->
 </LinearLayout>

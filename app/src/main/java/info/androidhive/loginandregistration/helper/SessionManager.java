@@ -1,5 +1,6 @@
 package info.androidhive.loginandregistration.helper;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -10,19 +11,20 @@ public class SessionManager {
 	private static String TAG = SessionManager.class.getSimpleName();
 
 	// Shared Preferences
-	SharedPreferences pref;
+	private SharedPreferences pref;
 
-	Editor editor;
-	Context _context;
+	private Editor editor;
+	private Context _context;
 
 	// Shared pref mode
-	int PRIVATE_MODE = 0;
+	private int PRIVATE_MODE = 0;
 
 	// Shared preferences file name
 	private static final String PREF_NAME = "AndroidHiveLogin";
 	
 	private static final String KEY_IS_LOGGED_IN = "isLoggedIn";
 
+	@SuppressLint("CommitPrefEdits")
 	public SessionManager(Context context) {
 		this._context = context;
 		pref = _context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
