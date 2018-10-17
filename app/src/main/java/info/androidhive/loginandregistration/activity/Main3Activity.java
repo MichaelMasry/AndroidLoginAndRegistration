@@ -4,10 +4,10 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,39 +15,30 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.List;
-
 import info.androidhive.loginandregistration.R;
 import info.androidhive.loginandregistration.helper.Landmark;
-import info.androidhive.loginandregistration.helper.LandmarkAdapter;
-
-import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 public class Main3Activity extends AppCompatActivity {
 
 
-    private final String url3 = "http://192.168.1.4/userDB/loadDB.php";
+    private final String url3 = "http://192.168.1.5/userDB/loadDB.php";
     private ListView listView;
     private ArrayList<Landmark> landmarkList;
     private LandMarkAdapter landMarkAdapter;
     private Location currentLocation;
-    // private FusedLocationProviderClient client;
+    private FusedLocationProviderClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,20 +49,13 @@ public class Main3Activity extends AppCompatActivity {
         landMarkAdapter = new LandMarkAdapter(this, landmarkList);
         //gpsLoc(this);
         //to get current location values
-    /*    client = LocationServices.getFusedLocationProviderClient(this);
+        client = LocationServices.getFusedLocationProviderClient(this);
         System.out.println("cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc");
-        if (ActivityCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+        System.out.println("dddddddddddddddddddddddddddddddddddddddddddddddddd");
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        System.out.println("dddddddddddddddddddddddddddddddddddddddddddddddddd");
-        client.getLastLocation().addOnSuccessListener(Main3Activity.this, new OnSuccessListener<Location>() {
+        client.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
                 if (location != null) {
@@ -82,7 +66,7 @@ public class Main3Activity extends AppCompatActivity {
                 }
             }
         });
-        System.out.println("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");*/
+        System.out.println("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
         loadData();
     }
 
@@ -97,12 +81,12 @@ public class Main3Activity extends AppCompatActivity {
                         JSONObject lmObj = jsonArray.getJSONObject(i);
                         double latitude = Double.parseDouble(lmObj.getString("Latitude"));
                         double longitude = Double.parseDouble(lmObj.getString("Longitude"));
-                        //  double distance = calculateDistance(latitude,longitude);
+                        double distance = calculateDistance(latitude,longitude);
                         String name = lmObj.getString("Name");
                         double rate = Double.parseDouble(lmObj.getString("rating"));
                         //String image = lmObj.getString("image_path");
                         String phone = lmObj.getString("Phone_Number");
-                        Landmark lm = new Landmark(name, 12.3, rate, phone);
+                        Landmark lm = new Landmark(name, distance, rate, phone);
                         landmarkList.add(lm);
                     }
                     listView.setAdapter(landMarkAdapter);
@@ -122,15 +106,16 @@ public class Main3Activity extends AppCompatActivity {
     class LandMarkAdapter extends ArrayAdapter<Landmark> {
         //   private Context context;
         //    private List<Landmark> landmarkList;
-        public LandMarkAdapter(Context context, ArrayList<Landmark> landmarkList) {
+        LandMarkAdapter(Context context, ArrayList<Landmark> landmarkList) {
             super(context, 0, landmarkList);
             //   this.context=context;
             //   this.landmarkList=landmarkList;
 
         }
 
+        @NonNull
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(int position, View convertView, @NonNull ViewGroup parent) {
             // Get the data item for this position
             Landmark user = getItem(position);
             // Check if an existing view is being reused, otherwise inflate the view
@@ -138,13 +123,16 @@ public class Main3Activity extends AppCompatActivity {
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_layout, parent, false);
             }
             // Lookup view for data population
-            TextView tvName = (TextView) convertView.findViewById(R.id.textViewTitle);
-            TextView tvHome = (TextView) convertView.findViewById(R.id.textViewShortDesc);
-            TextView ratingTextView = (TextView) convertView.findViewById(R.id.textViewRating);
+            TextView tvName;
+            tvName = convertView.findViewById(R.id.textViewTitle);
+            TextView tvHome;
+            tvHome = convertView.findViewById(R.id.textViewShortDesc);
+            TextView ratingTextView;
+            ratingTextView = convertView.findViewById(R.id.textViewRating);
             // Populate the data into the template view using the data object
             tvName.setText(user.getName());
             tvHome.setText(user.getDistance() + "");
-            ratingTextView.setText(user.getRate() + "");
+            ratingTextView.setText(user.getRate()+"");
             // Return the completed view to render on screen
             return convertView;
         }
@@ -165,14 +153,9 @@ public class Main3Activity extends AppCompatActivity {
         android.location.LocationManager manager = (android.location.LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         if (manager != null) {
             for (String provider : manager.getAllProviders()) {
-                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
+                if ((ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED) && (ActivityCompat.checkSelfPermission(this,
+                        Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
                     return;
                 }
                 Location location = manager.getLastKnownLocation(provider);

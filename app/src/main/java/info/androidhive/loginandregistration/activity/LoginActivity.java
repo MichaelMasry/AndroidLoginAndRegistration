@@ -32,7 +32,7 @@ public class LoginActivity extends Activity {
     private ProgressDialog pDialog;
     private SessionManager session;
     private SQLiteHandler db;
-    private final String url = "http://192.168.1.4/userDB/login.php";
+    private final String url = "http://192.168.1.5/userDB/login.php";
     public static final String Key_Email = "email";
     public static final String Key_Password = "password";
 
